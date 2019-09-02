@@ -3,6 +3,17 @@ import shortid from 'shortid';
 import Controls from './Controls/Controls';
 import Balance from './Balance/Balance';
 
+// const date = new Date();
+
+// const options = {
+//   year: 'numeric',
+//   month: 'long',
+//   timezone: 'UTC',
+//   hour: 'numeric',
+//   minute: 'numeric',
+//   second: 'numeric',
+// };
+
 export default class Dashboard extends Component {
   state = {
     transactions: [],
@@ -20,16 +31,28 @@ export default class Dashboard extends Component {
 
   handleSubmitTransaction = e => {
     e.preventDefault();
+    const date = new Date();
+
+    const options = {
+      year: 'numeric',
+      month: 'long',
+      timezone: 'UTC',
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+    };
     if (e.target.name === 'Deposit' && this.state.transaction > 0) {
       const newTransaction = {
         id: shortid.generate(),
         amount: this.state.transaction,
         type: e.target.name,
+        date: date.toLocaleString('en', options),
       };
       this.setState(prevState => ({
         transactions: [...prevState.transactions, newTransaction],
         balance: prevState.balance + Number(newTransaction.amount),
         allDeposits: prevState.allDeposits + Number(newTransaction.amount),
+        transaction: '',
       }));
     } else if (this.state.transaction === '0') {
       alert('Введите сумму для проведения операции!');
@@ -37,17 +60,20 @@ export default class Dashboard extends Component {
 
     if (
       e.target.name === 'Withdraw' &&
-      this.state.balance >= this.state.transaction
+      this.state.balance >= this.state.transaction &&
+      this.state.transaction > 0
     ) {
       const newTransaction = {
         id: shortid.generate(),
         amount: this.state.transaction,
         type: e.target.name,
+        date: date.toLocaleString('en', options),
       };
       this.setState(prevState => ({
         transactions: [...prevState.transactions, newTransaction],
         balance: prevState.balance - Number(newTransaction.amount),
         allWithdraws: prevState.allWithdraws + Number(newTransaction.amount),
+        transaction: '',
       }));
     } else if (
       e.target.name === 'Withdraw' &&
@@ -85,7 +111,7 @@ export default class Dashboard extends Component {
               <tr key={transaction.id}>
                 <td>{transaction.type}</td>
                 <td>{transaction.amount}$</td>
-                <td>4/17/2019, 12:45:17</td>
+                <td>{transaction.date}</td>
               </tr>
             ))}
           </tbody>
