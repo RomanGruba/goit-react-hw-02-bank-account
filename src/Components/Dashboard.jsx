@@ -1,18 +1,9 @@
 import React, { Component } from 'react';
 import shortid from 'shortid';
+import { ToastContainer, toast } from 'react-toastify';
 import Controls from './Controls/Controls';
 import Balance from './Balance/Balance';
-
-// const date = new Date();
-
-// const options = {
-//   year: 'numeric',
-//   month: 'long',
-//   timezone: 'UTC',
-//   hour: 'numeric',
-//   minute: 'numeric',
-//   second: 'numeric',
-// };
+import 'react-toastify/dist/ReactToastify.css';
 
 export default class Dashboard extends Component {
   state = {
@@ -28,6 +19,8 @@ export default class Dashboard extends Component {
       transaction: e.target.value,
     });
   };
+
+  notify = notice => toast(notice);
 
   handleSubmitTransaction = e => {
     e.preventDefault();
@@ -55,7 +48,7 @@ export default class Dashboard extends Component {
         transaction: '',
       }));
     } else if (this.state.transaction === '0') {
-      alert('Введите сумму для проведения операции!');
+      this.notify('Введите сумму для проведения операции!');
     }
 
     if (
@@ -79,7 +72,7 @@ export default class Dashboard extends Component {
       e.target.name === 'Withdraw' &&
       this.state.balance <= this.state.transaction
     ) {
-      alert('На счету недостаточно средств для проведения операции!');
+      this.notify('На счету недостаточно средств для проведения операции!');
     }
   };
 
@@ -97,6 +90,8 @@ export default class Dashboard extends Component {
           allWithdraws={allWithdraws}
           balance={balance}
         />
+
+        <ToastContainer />
 
         <table className="history">
           <thead>
