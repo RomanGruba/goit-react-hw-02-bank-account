@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import transactionType from '../Utils/transactionType';
 
 const Controls = ({ transaction, addTransaction, handleSubmitTransaction }) => (
@@ -25,5 +26,11 @@ const Controls = ({ transaction, addTransaction, handleSubmitTransaction }) => (
     </button>
   </section>
 );
+
+Controls.propTypes = {
+  transaction: PropTypes.string.isRequired,
+  addTransaction: PropTypes.func.isRequired,
+  handleSubmitTransaction: PropTypes.func.isRequired,
+};
 
 export default Controls;
